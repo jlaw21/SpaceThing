@@ -13,7 +13,7 @@ public class Board extends JPanel implements ActionListener {
    ArrayList<Bullet> bullets = new ArrayList<Bullet>();
    Enemy[][] enemies = new Enemy[5][10];
    Timer timer;
-   Long timeDelay;
+   Long timeDelay, bulletDelay;
    Game game;
 
    public Board(Game game){
@@ -33,6 +33,7 @@ public class Board extends JPanel implements ActionListener {
            }
        }
        timeDelay = System.currentTimeMillis();
+       bulletDelay = System.currentTimeMillis();
    }
 
    public void checkCollisions(){
@@ -42,14 +43,21 @@ public class Board extends JPanel implements ActionListener {
    @Override
     public void actionPerformed(ActionEvent e) {
        long currentTime = System.currentTimeMillis();
-       //player.moveLeft();
-       if(game.isSpacePressed()){
+       if(game.isSpacePressed() && currentTime - bulletDelay >= 250){
            bullets.add(new Bullet(player));
+           bulletDelay = System.currentTimeMillis();
        }
 
-       for(Bullet bullet: bullets){
-           bullet.move();
+       for(int i = bullets.size()-1; i >= 0; i--){
+           if(bullets.get(i).getY() < 0){
+               bullets.remove(bullets.get(i));
+           }else
+               bullets.get(i).move();
        }
+
+
+       System.out.println("Number of Bullets: " + bullets.size());
+
        if(currentTime - timeDelay >= 1000){
            for(int row = 0; row < 5; row++){
                for(int col = 0; col < 10; col++){
@@ -58,10 +66,20 @@ public class Board extends JPanel implements ActionListener {
            }
            timeDelay = System.currentTimeMillis();
        }
+
+       if(game.isLeftPressed() && player.getX() > 0 ){
+           player.moveLeft();
+       }
+
+       if(game.isRightPressed() && (player.getX()+ player.getWIDTH()) < getWidth()){
+           player.moveRight();
+       }
+
        repaint();
     }
 
    public void paintComponent(Graphics g){
+
        super.paintComponent(g);
 
        player.paint(g);

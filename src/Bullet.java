@@ -4,6 +4,7 @@ public class Bullet {
 
     int x, y, diameter = 10;
     int speed, dx, dy = 10;
+    boolean remove;
 
     public Bullet(Player player){
 
@@ -19,4 +20,16 @@ public class Bullet {
         g.setColor(Color.white);
         g.fillOval(x, y, diameter, diameter);
     }
+
+    public int getY(){
+        return y;
+    }
+
+    public void setRemove(){
+        remove = true;
+    }
+    public boolean getRemove(){
+        return remove;
+    }
+
 }
