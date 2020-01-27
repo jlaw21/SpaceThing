@@ -16,6 +16,11 @@ public class Bullet {
         y-=dy;
     }
 
+    public Rectangle getBounds(){
+        return new Rectangle(x, y, diameter, diameter);
+    }
+
+
     public void paint(Graphics g){
         g.setColor(Color.white);
         g.fillOval(x, y, diameter, diameter);

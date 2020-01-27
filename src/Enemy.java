@@ -20,6 +20,10 @@ public class Enemy {
         y+=dy;
     }
 
+    public Rectangle getBounds(){
+        return new Rectangle(x, y, diameter, diameter);
+    }
+
     public void paint(Graphics g){
         g.setColor(Color.green);
         g.fillOval(x, y, diameter, diameter);
