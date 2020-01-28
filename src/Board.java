@@ -76,9 +76,6 @@ public class Board extends JPanel implements ActionListener {
                bullets.get(i).move();
        }
 
-
-       System.out.println("Number of Bullets: " + bullets.size());
-
        if(currentTime - timeDelay >= 1000){
            for(int row = 0; row < 5; row++){
                for(int col = 0; col < 10; col++){
