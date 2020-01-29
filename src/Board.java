@@ -64,56 +64,81 @@ public class Board extends JPanel implements ActionListener {
 
        checkCollisions();
 
-       if(game.isSpacePressed() && currentTime - bulletDelay >= 250){
-           bullets.add(new Bullet(player));
-           bulletDelay = System.currentTimeMillis();
-       }
+        if(Gamestates.isPLAY()){
+            if(game.isSpacePressed() && currentTime - bulletDelay >= 250){
+                bullets.add(new Bullet(player));
+                bulletDelay = System.currentTimeMillis();
+            }
 
-       for(int i = bullets.size()-1; i >= 0; i--){
-           if(bullets.get(i).getY() < 0){
-               bullets.remove(bullets.get(i));
-           }else
-               bullets.get(i).move();
-       }
+            for(int i = bullets.size()-1; i >= 0; i--){
+                if(bullets.get(i).getY() < 0){
+                    bullets.remove(bullets.get(i));
+                }else
+                    bullets.get(i).move();
+            }
 
-       if(currentTime - timeDelay >= 1000){
-           for(int row = 0; row < 5; row++){
-               for(int col = 0; col < 10; col++){
-                   if(enemies[row][col]!=null){
-                       enemies[row][col].move();
-                   }
-               }
-           }
-           timeDelay = System.currentTimeMillis();
-       }
+            if(currentTime - timeDelay >= 1000){
+                for(int row = 0; row < 5; row++){
+                    for(int col = 0; col < 10; col++){
+                        if(enemies[row][col]!=null){
+                            enemies[row][col].move();
+                        }
+                    }
+                }
+                timeDelay = System.currentTimeMillis();
+            }
 
-       if(game.isLeftPressed() && player.getX() > 0 ){
-           player.moveLeft();
-       }
+            if(game.isLeftPressed() && player.getX() > 0 ){
+                player.moveLeft();
+            }
 
-       if(game.isRightPressed() && (player.getX()+ player.getWIDTH()) < getWidth()){
-           player.moveRight();
-       }
+            if(game.isRightPressed() && (player.getX()+ player.getWIDTH()) < getWidth()){
+                player.moveRight();
+            }
+        }
 
-       repaint();
+        if(game.isEnterPressed()){
+           Gamestates.setPLAY(true);
+        }
+        
+        repaint();
     }
 
    public void paintComponent(Graphics g){
 
        super.paintComponent(g);
 
-       player.paint(g);
-       for(int row = 0; row < 5; row++){
-           for(int col = 0; col < 10; col++){
-               if(enemies[row][col] != null){
-                   enemies[row][col].paint(g);
-               }
-           }
-       }
-       for(Bullet bullet: bullets){
-           bullet.paint(g);
+       if(Gamestates.isMENU()){
+            //Paint the Menu
+           g.setColor(Color.WHITE);
+           g.setFont(new Font("Arial", Font.PLAIN, 72));
+           printSimpleString("SPACE THING", getWidth(), 0, 150, g);
+           g.setFont(new Font("Arial", Font.BOLD, 36));
+           printSimpleString("Press ENTER to play!", getWidth(), 0, 300, g);
        }
 
+       if(Gamestates.isPLAY()){
+
+            player.paint(g);
+            for(int row = 0; row < 5; row++){
+                for(int col = 0; col < 10; col++){
+                    if(enemies[row][col] != null){
+                        enemies[row][col].paint(g);
+                    }
+                }
+            }
+            for(Bullet bullet: bullets){
+                bullet.paint(g);
+            }
+        }
+
+
+   }
+
+   private void printSimpleString(String s, int width, int XPos, int YPos, Graphics g){
+       int stringLen = (int)g.getFontMetrics().getStringBounds(s, g).getWidth();
+       int start = width/2 - stringLen/2;
+       g.drawString(s, start + XPos, YPos);
    }
 
 
