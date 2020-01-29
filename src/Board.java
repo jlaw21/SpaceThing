@@ -62,9 +62,9 @@ public class Board extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
        long currentTime = System.currentTimeMillis();
 
-       checkCollisions();
+        if(Gamestates.isPLAY() && !Gamestates.isPAUSE()){
 
-        if(Gamestates.isPLAY()){
+            checkCollisions();
             if(game.isSpacePressed() && currentTime - bulletDelay >= 250){
                 bullets.add(new Bullet(player));
                 bulletDelay = System.currentTimeMillis();
@@ -99,8 +99,16 @@ public class Board extends JPanel implements ActionListener {
 
         if(game.isEnterPressed()){
            Gamestates.setPLAY(true);
+           Gamestates.setMENU(false);
         }
-        
+
+        if(game.ispPressed()){
+            if(Gamestates.isPAUSE()){
+                Gamestates.setPAUSE(false);
+            }else
+                Gamestates.setPAUSE(true);
+       }
+
         repaint();
     }
 
